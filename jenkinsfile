@@ -1,0 +1,22 @@
+pipeline {
+  agent any
+  stages {
+    stage('usernamePassword') {
+      steps {
+        script {
+          withCredentials([
+            usernamePassword(credentialsId: '1056587f-1181-4887-8a76-f72eb6912dc0',
+              usernameVariable: 'usernamedb',
+              passwordVariable: 'passworddb')]) 
+          {
+            def buildnum = "${env.BUILD_NUMBER}"
+            def jobname = "${env.JOB_NAME}"
+            def jenkinsuser = "${env.JENKINS_USER}"
+            sh ('python3 projectAdduserDB.py $email $username $userid $usernamedb $passworddb $environment $ticket ' + "$jobname " + "$buildnum " + "$jenkinsuser " +'$Country')
+          
+            }
+        }
+      }
+    }
+  }
+}
